@@ -1,0 +1,64 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "title": "Parsed MTOM Message Schema",
+  "description": "Schema voor het resultaat van MTOM naar JSON conversie",
+  "required": ["messageId", "clientId", "metadata", "content", "parsingInfo"],
+  "properties": {
+    "messageId": {
+      "type": "string",
+      "description": "Unieke bericht identifier (ecmid)"
+    },
+    "clientId": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Klant identifier"
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Gemaakte metadata uit het MTOM-bericht",
+      "additionalProperties": true
+    },
+    "content": {
+      "type": "object",
+      "required": ["data", "mimeType"],
+      "properties": {
+        "data": {
+          "type": "string",
+          "description": "Base64 encoded content"
+        },
+        "mimeType": {
+          "type": "string",
+          "description": "MIME type van de content"
+        },
+        "filename": {
+          "type": "string",
+          "description": "Bestandsnaam indien aanwezig"
+        },
+        "size": {
+          "type": "integer",
+          "description": "Grootte in bytes"
+        }
+      }
+    },
+    "parsingInfo": {
+      "type": "object",
+      "required": ["timestamp", "parserVersion"],
+      "properties": {
+        "timestamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Tijdstip van parsing"
+        },
+        "parserVersion": {
+          "type": "string",
+          "description": "Versie van de parser"
+        },
+        "processingTimeMs": {
+          "type": "integer",
+          "description": "Verwerkingstijd in milliseconden"
+        }
+      }
+    }
+  }
+}

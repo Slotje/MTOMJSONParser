@@ -1,0 +1,114 @@
+{
+  "clientId": "550e8400-e29b-41d4-a716-446655440000",
+  "clientName": "Example Client - DNI/IVAA",
+  "metadataMapping": {
+    "objectStore": "ECM_ObjectStore",
+    "documentClass": "Document",
+    "fields": [
+      {
+        "sourceField": "//ecmid",
+        "targetProperty": "BBM1",
+        "required": true,
+        "multiValue": false
+      },
+      {
+        "sourceField": "//value[@key='Eigenaar_L1']",
+        "targetProperty": "BBM2",
+        "required": true,
+        "multiValue": false
+      },
+      {
+        "sourceField": "//value[@key='Eigenaar_L2']",
+        "targetProperty": "BBM3",
+        "required": true,
+        "multiValue": false
+      },
+      {
+        "sourceField": "//value[@key='Eigenaar_L3']",
+        "targetProperty": "BBM4",
+        "required": true,
+        "multiValue": false
+      },
+      {
+        "sourceField": "//value[@key='KenmerkInhoud']",
+        "targetProperty": "BBM6",
+        "required": true,
+        "multiValue": false
+      },
+      {
+        "sourceField": "//value[@key='KenmerkType']",
+        "targetProperty": "BBM10",
+        "required": true,
+        "multiValue": false
+      },
+      {
+        "sourceField": "//value[@key='Documentsoort']",
+        "targetProperty": "Documentsoort",
+        "required": true,
+        "multiValue": false
+      },
+      {
+        "sourceField": "//value[@key='Kanaal']",
+        "targetProperty": "Kanaal",
+        "required": true,
+        "multiValue": false
+      },
+      {
+        "sourceField": "//value[@key='Middel']",
+        "targetProperty": "Middel",
+        "required": true,
+        "multiValue": true
+      },
+      {
+        "sourceField": "//value[@key='Richting']",
+        "targetProperty": "Richting",
+        "required": true,
+        "multiValue": false
+      },
+      {
+        "sourceField": "//value[@key='StartArchiefwaardigheid']",
+        "targetProperty": "StartArchiefwaardigheid",
+        "required": false,
+        "format": "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
+        "multiValue": false
+      },
+      {
+        "sourceField": "//value[@key='DekkingBeginDatum']",
+        "targetProperty": "DekkingBeginDatum",
+        "required": false,
+        "format": "yyyy-MM-dd",
+        "multiValue": false
+      },
+      {
+        "sourceField": "//value[@key='DekkingEindDatum']",
+        "targetProperty": "DekkingEindDatum",
+        "required": false,
+        "format": "yyyy-MM-dd",
+        "multiValue": false
+      },
+      {
+        "sourceField": "//value[@key='Taal']",
+        "targetProperty": "Taal",
+        "required": false,
+        "multiValue": true
+      },
+      {
+        "sourceField": "//filename",
+        "targetProperty": "DocumentTitle",
+        "required": true,
+        "multiValue": false
+      }
+    ]
+  },
+  "businessInfo": {
+    "contactEmail": "support@example.nl",
+    "supportGroup": "ECM Support Team",
+    "maxMessageSize": 10485760,
+    "maxMessagesPerDay": 10000
+  },
+  "processingRules": {
+    "retentionDays": 30,
+    "autoRetryEnabled": true,
+    "processingEnabled": true
+  }
+}
