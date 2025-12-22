@@ -7,13 +7,13 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install dependencies
-RUN npm ci
+RUN npm install --legacy-peer-deps
 
 # Copy source code
 COPY . .
 
 # Build the application
-RUN npm run build --  --configuration production
+RUN npm run build -- --configuration production
 
 # Stage 2: Serve with nginx
 FROM nginx:alpine
