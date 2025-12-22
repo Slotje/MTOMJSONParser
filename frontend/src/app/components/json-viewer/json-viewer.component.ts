@@ -12,6 +12,10 @@ export class JsonViewerComponent {
     return JSON.stringify(this.data, null, 2);
   }
 
+  getFieldCount(): number {
+    return this.data ? Object.keys(this.data).length : 0;
+  }
+
   isArray(value: any): boolean {
     return Array.isArray(value);
   }

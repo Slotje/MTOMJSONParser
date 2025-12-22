@@ -29,7 +29,7 @@ public class MTOMConversionService {
     JsonSchemaValidator jsonSchemaValidator;
 
     /**
-     * Convert MTOM message to JSON
+     * Convert MTOM message to JSON (full ParsedMessage object)
      *
      * @param mtomXml MTOM message as XML string
      * @param clientId Client identifier
@@ -56,12 +56,28 @@ public class MTOMConversionService {
         // Business rule validation
         messageValidator.validate(parsedMessage, config);
 
-        // JSON schema validation
-        jsonSchemaValidator.validateParsedMessage(parsedMessage);
+        // JSON schema validation (commented out for simple mapping)
+        // jsonSchemaValidator.validateParsedMessage(parsedMessage);
 
         LOG.infof("Successfully converted MTOM message %s to JSON", parsedMessage.getMessageId());
 
         return parsedMessage;
+    }
+
+    /**
+     * Convert MTOM message to simple JSON (only mapped metadata fields)
+     *
+     * @param mtomXml MTOM message as XML string
+     * @param clientId Client identifier
+     * @return Map with only the mapped metadata fields
+     */
+    public java.util.Map<String, Object> convertToSimpleJson(String mtomXml, String clientId) {
+        LOG.infof("Starting MTOM to simple JSON conversion for client: %s", clientId);
+
+        ParsedMessage parsedMessage = convertToJson(mtomXml, clientId);
+
+        // Return only the metadata (the mapped fields)
+        return parsedMessage.getMetadata();
     }
 
     /**

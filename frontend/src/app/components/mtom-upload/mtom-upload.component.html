@@ -115,11 +115,11 @@
   </mat-card>
 
   <!-- Parsed JSON Display -->
-  <mat-card class="result-card" *ngIf="parsedMessage">
+  <mat-card class="result-card" *ngIf="parsedJson">
     <mat-card-header>
       <mat-card-title>
         <mat-icon color="primary">check_circle</mat-icon>
-        Parsed JSON Result
+        Converted JSON Result
       </mat-card-title>
       <button mat-icon-button (click)="downloadJson()" matTooltip="Download JSON">
         <mat-icon>download</mat-icon>
@@ -127,7 +127,7 @@
     </mat-card-header>
 
     <mat-card-content>
-      <app-json-viewer [data]="parsedMessage"></app-json-viewer>
+      <app-json-viewer [data]="parsedJson"></app-json-viewer>
     </mat-card-content>
   </mat-card>
 </div>

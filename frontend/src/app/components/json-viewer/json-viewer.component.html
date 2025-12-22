@@ -5,42 +5,16 @@
     </button>
   </div>
 
-  <mat-expansion-panel class="section-panel" [expanded]="true">
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        <mat-icon>info</mat-icon>
-        Message Information
-      </mat-panel-title>
-    </mat-expansion-panel-header>
-    <div class="info-grid">
-      <div class="info-item">
-        <span class="label">Message ID:</span>
-        <span class="value">{{ data.messageId }}</span>
-      </div>
-      <div class="info-item">
-        <span class="label">Client ID:</span>
-        <span class="value">{{ data.clientId }}</span>
-      </div>
-      <div class="info-item" *ngIf="data.parsingInfo">
-        <span class="label">Parsed At:</span>
-        <span class="value">{{ data.parsingInfo.timestamp | date:'medium' }}</span>
-      </div>
-      <div class="info-item" *ngIf="data.parsingInfo?.processingTimeMs">
-        <span class="label">Processing Time:</span>
-        <span class="value">{{ data.parsingInfo.processingTimeMs }} ms</span>
-      </div>
-    </div>
-  </mat-expansion-panel>
-
+  <!-- Simple key-value display -->
   <mat-expansion-panel class="section-panel" [expanded]="true">
     <mat-expansion-panel-header>
       <mat-panel-title>
         <mat-icon>list_alt</mat-icon>
-        Metadata ({{ (data.metadata | keyvalue).length }} fields)
+        Mapped Fields ({{ getFieldCount() }})
       </mat-panel-title>
     </mat-expansion-panel-header>
     <div class="metadata-grid">
-      <div class="metadata-item" *ngFor="let item of data.metadata | keyvalue">
+      <div class="metadata-item" *ngFor="let item of data | keyvalue">
         <span class="key">{{ item.key }}:</span>
         <span class="value" *ngIf="!isArray(item.value)">{{ item.value }}</span>
         <ul class="value-list" *ngIf="isArray(item.value)">
@@ -50,33 +24,7 @@
     </div>
   </mat-expansion-panel>
 
-  <mat-expansion-panel class="section-panel" *ngIf="data.content">
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        <mat-icon>attachment</mat-icon>
-        Content
-      </mat-panel-title>
-    </mat-expansion-panel-header>
-    <div class="info-grid">
-      <div class="info-item" *ngIf="data.content.filename">
-        <span class="label">Filename:</span>
-        <span class="value">{{ data.content.filename }}</span>
-      </div>
-      <div class="info-item">
-        <span class="label">MIME Type:</span>
-        <span class="value">{{ data.content.mimeType }}</span>
-      </div>
-      <div class="info-item" *ngIf="data.content.size">
-        <span class="label">Size:</span>
-        <span class="value">{{ (data.content.size / 1024).toFixed(2) }} KB</span>
-      </div>
-      <div class="info-item">
-        <span class="label">Data:</span>
-        <span class="value data-preview">{{ data.content.data.substring(0, 100) }}...</span>
-      </div>
-    </div>
-  </mat-expansion-panel>
-
+  <!-- Raw JSON view -->
   <mat-expansion-panel class="section-panel">
     <mat-expansion-panel-header>
       <mat-panel-title>

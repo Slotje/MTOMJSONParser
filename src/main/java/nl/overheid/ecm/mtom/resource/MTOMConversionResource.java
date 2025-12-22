@@ -21,7 +21,7 @@ public class MTOMConversionResource {
     MTOMConversionService conversionService;
 
     /**
-     * Convert MTOM message to JSON
+     * Convert MTOM message to simple JSON (only mapped fields)
      *
      * POST /api/v1/mtom/convert?clientId=xxx
      * Body: MTOM XML
@@ -46,7 +46,8 @@ public class MTOMConversionResource {
                 .build();
         }
 
-        ParsedMessage result = conversionService.convertToJson(mtomXml, clientId);
+        // Return simple JSON with only mapped metadata fields
+        java.util.Map<String, Object> result = conversionService.convertToSimpleJson(mtomXml, clientId);
 
         return Response.ok(result).build();
     }

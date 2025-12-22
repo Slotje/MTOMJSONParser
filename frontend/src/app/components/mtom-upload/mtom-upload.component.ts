@@ -14,7 +14,7 @@ export class MtomUploadComponent implements OnInit {
   selectedClientId: string = '';
   clients: ClientConfiguration[] = [];
   loading = false;
-  parsedMessage: ParsedMessage | null = null;
+  parsedJson: any | null = null;  // Simple JSON object with mapped fields
   error: ErrorResponse | null = null;
   mtomContent: string = '';
 
@@ -63,12 +63,12 @@ export class MtomUploadComponent implements OnInit {
     }
 
     this.loading = true;
-    this.parsedMessage = null;
+    this.parsedJson = null;
     this.error = null;
 
     this.mtomApiService.convertMtom(this.mtomContent, this.selectedClientId).subscribe({
       next: (result) => {
-        this.parsedMessage = result;
+        this.parsedJson = result;
         this.loading = false;
       },
       error: (err) => {
@@ -102,19 +102,20 @@ export class MtomUploadComponent implements OnInit {
   clear(): void {
     this.selectedFile = null;
     this.mtomContent = '';
-    this.parsedMessage = null;
+    this.parsedJson = null;
     this.error = null;
   }
 
   downloadJson(): void {
-    if (!this.parsedMessage) return;
+    if (!this.parsedJson) return;
 
-    const json = JSON.stringify(this.parsedMessage, null, 2);
+    const json = JSON.stringify(this.parsedJson, null, 2);
     const blob = new Blob([json], { type: 'application/json' });
     const url = window.URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `${this.parsedMessage.messageId}.json`;
+    const timestamp = new Date().getTime();
+    link.download = `mtom-converted-${timestamp}.json`;
     link.click();
     window.URL.revokeObjectURL(url);
   }

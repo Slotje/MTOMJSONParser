@@ -14,12 +14,12 @@ export class MtomApiService {
   constructor(private http: HttpClient) {}
 
   /**
-   * Convert MTOM XML to JSON
+   * Convert MTOM XML to JSON (simple mapping)
    */
-  convertMtom(mtomXml: string, clientId: string): Observable<ParsedMessage> {
+  convertMtom(mtomXml: string, clientId: string): Observable<any> {
     const params = new HttpParams().set('clientId', clientId);
 
-    return this.http.post<ParsedMessage>(
+    return this.http.post<any>(
       `${this.apiUrl}/api/v1/mtom/convert`,
       mtomXml,
       {
