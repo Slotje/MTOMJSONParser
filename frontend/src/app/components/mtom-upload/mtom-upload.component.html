@@ -1,0 +1,133 @@
+<div class="mtom-upload-container">
+  <mat-card class="upload-card">
+    <mat-card-header>
+      <mat-card-title>MTOM to JSON Converter</mat-card-title>
+      <mat-card-subtitle>Upload MTOM XML file to convert to JSON</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <!-- Client Selection -->
+      <div class="form-section">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Select Client</mat-label>
+          <mat-select [(ngModel)]="selectedClientId">
+            <mat-option *ngFor="let client of clients" [value]="client.clientId">
+              {{ client.clientName }} ({{ client.clientId }})
+            </mat-option>
+          </mat-select>
+          <mat-hint>Choose the client configuration for parsing</mat-hint>
+        </mat-form-field>
+      </div>
+
+      <!-- File Upload -->
+      <div class="form-section">
+        <input
+          type="file"
+          accept=".xml"
+          (change)="onFileSelected($event)"
+          #fileInput
+          style="display: none"
+        />
+
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="fileInput.click()"
+          [disabled]="loading"
+        >
+          <mat-icon>upload_file</mat-icon>
+          Choose MTOM File
+        </button>
+
+        <div class="file-info" *ngIf="selectedFile">
+          <mat-icon>description</mat-icon>
+          <span>{{ selectedFile.name }}</span>
+          <span class="file-size">({{ (selectedFile.size / 1024).toFixed(2) }} KB)</span>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="actions">
+        <button
+          mat-raised-button
+          color="accent"
+          (click)="convertMtom()"
+          [disabled]="!selectedFile || !selectedClientId || loading"
+        >
+          <mat-icon>transform</mat-icon>
+          Convert to JSON
+        </button>
+
+        <button
+          mat-raised-button
+          (click)="validateMtom()"
+          [disabled]="!selectedFile || !selectedClientId || loading"
+        >
+          <mat-icon>check_circle</mat-icon>
+          Validate Only
+        </button>
+
+        <button
+          mat-stroked-button
+          (click)="clear()"
+          [disabled]="loading"
+        >
+          <mat-icon>clear</mat-icon>
+          Clear
+        </button>
+      </div>
+
+      <!-- Loading Spinner -->
+      <div class="loading" *ngIf="loading">
+        <mat-spinner diameter="40"></mat-spinner>
+        <p>Processing MTOM message...</p>
+      </div>
+
+      <!-- Error Display -->
+      <mat-card class="error-card" *ngIf="error">
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon color="warn">error</mat-icon>
+            Error: {{ error.errorCode }}
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <p><strong>Message:</strong> {{ error.errorMessage }}</p>
+          <p *ngIf="error.timestamp"><strong>Time:</strong> {{ error.timestamp | date:'medium' }}</p>
+          <p *ngIf="error.retryable !== undefined">
+            <strong>Retryable:</strong> {{ error.retryable ? 'Yes' : 'No' }}
+          </p>
+
+          <div *ngIf="error.errorDetails && error.errorDetails['validationErrors']">
+            <p><strong>Validation Errors:</strong></p>
+            <ul>
+              <li *ngFor="let err of error.errorDetails['validationErrors']">{{ err }}</li>
+            </ul>
+          </div>
+
+          <div *ngIf="error.errorDetails && !error.errorDetails['validationErrors']">
+            <p><strong>Details:</strong></p>
+            <pre>{{ error.errorDetails | json }}</pre>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Parsed JSON Display -->
+  <mat-card class="result-card" *ngIf="parsedMessage">
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon color="primary">check_circle</mat-icon>
+        Parsed JSON Result
+      </mat-card-title>
+      <button mat-icon-button (click)="downloadJson()" matTooltip="Download JSON">
+        <mat-icon>download</mat-icon>
+      </button>
+    </mat-card-header>
+
+    <mat-card-content>
+      <app-json-viewer [data]="parsedMessage"></app-json-viewer>
+    </mat-card-content>
+  </mat-card>
+</div>

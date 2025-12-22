@@ -35,6 +35,7 @@ De applicatie bestaat uit de volgende componenten:
 
 ## Technologie Stack
 
+### Backend
 - **Quarkus 3.6.4**: Java framework voor cloud-native applicaties
 - **Java 17**: Programmeertaal
 - **OpenShift**: Container orchestration platform
@@ -43,6 +44,56 @@ De applicatie bestaat uit de volgende componenten:
 - **Hibernate Validator**: Voor bean validatie
 - **SmallRye Health**: Voor health checks
 - **Micrometer Prometheus**: Voor metrics
+
+### Frontend
+- **Angular 17**: Modern web framework
+- **Angular Material**: UI component library
+- **TypeScript**: Type-safe JavaScript
+- **RxJS**: Reactive programming library
+- **Nginx**: Web server voor production deployment
+
+## Frontend Applicatie
+
+De Angular frontend biedt een gebruiksvriendelijke interface voor het uploaden en converteren van MTOM bestanden.
+
+### Features
+- 📤 **File Upload**: Drag-and-drop MTOM XML bestanden
+- 🔍 **Client Selectie**: Kies de juiste klantconfiguratie
+- ✅ **Validatie**: Valideer MTOM berichten voordat conversie
+- 📊 **JSON Viewer**: Gestructureerde weergave van geparseerde metadata
+- 💾 **Download**: Download geparseerde JSON
+- ⚠️ **Error Display**: Duidelijke foutmeldingen met details
+
+### Frontend Starten
+
+```bash
+cd frontend
+
+# Dependencies installeren
+npm install
+
+# Development server starten
+npm start
+```
+
+De applicatie is beschikbaar op `http://localhost:4200`
+
+De frontend maakt verbinding met de backend API op `http://localhost:8080` (configureerbaar in `src/environments/environment.ts`).
+
+### Frontend Bouwen voor Productie
+
+```bash
+cd frontend
+
+# Production build
+npm run build
+
+# Docker image bouwen
+docker build -t mtom-json-parser-frontend .
+
+# Container starten
+docker run -p 80:80 mtom-json-parser-frontend
+```
 
 ## API Endpoints
 

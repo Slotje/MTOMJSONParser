@@ -1,0 +1,26 @@
+mat-toolbar {
+  mat-icon {
+    margin-right: 0.5rem;
+  }
+
+  .spacer {
+    flex: 1 1 auto;
+  }
+}
+
+main {
+  min-height: calc(100vh - 128px);
+  padding: 2rem 0;
+  background-color: #fafafa;
+}
+
+footer {
+  background-color: #424242;
+  color: white;
+  text-align: center;
+  padding: 1.5rem;
+
+  p {
+    margin: 0;
+  }
+}
