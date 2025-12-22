@@ -44,7 +44,7 @@
         <span class="key">{{ item.key }}:</span>
         <span class="value" *ngIf="!isArray(item.value)">{{ item.value }}</span>
         <ul class="value-list" *ngIf="isArray(item.value)">
-          <li *ngFor="let val of item.value">{{ val }}</li>
+          <li *ngFor="let val of asArray(item.value)">{{ val }}</li>
         </ul>
       </div>
     </div>

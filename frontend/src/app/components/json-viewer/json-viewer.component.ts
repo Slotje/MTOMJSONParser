@@ -16,6 +16,10 @@ export class JsonViewerComponent {
     return Array.isArray(value);
   }
 
+  asArray(value: any): any[] {
+    return value as any[];
+  }
+
   copyToClipboard(): void {
     navigator.clipboard.writeText(this.formattedJson).then(() => {
       alert('JSON copied to clipboard!');
