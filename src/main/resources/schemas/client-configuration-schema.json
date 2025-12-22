@@ -1,0 +1,110 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "title": "BTE Klantconfiguratie Schema",
+  "required": ["clientId", "clientName", "metadataMapping", "businessInfo"],
+  "properties": {
+    "clientId": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Unieke klant-identifier (UUID)"
+    },
+    "clientName": {
+      "type": "string",
+      "description": "Naam van de klant"
+    },
+    "metadataMapping": {
+      "type": "object",
+      "description": "Mapping van MTOM-velden naar FileNet-properties",
+      "required": ["objectStore", "documentClass", "fields"],
+      "properties": {
+        "objectStore": {
+          "type": "string",
+          "description": "Naam van de FileNet Object Store"
+        },
+        "documentClass": {
+          "type": "string",
+          "description": "Document class in FileNet"
+        },
+        "fields": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/fieldMapping"
+          }
+        }
+      }
+    },
+    "businessInfo": {
+      "type": "object",
+      "required": ["contactEmail", "supportGroup"],
+      "properties": {
+        "contactEmail": {
+          "type": "string",
+          "format": "email"
+        },
+        "supportGroup": {
+          "type": "string"
+        },
+        "maxMessageSize": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "maxMessagesPerDay": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "processingRules": {
+      "type": "object",
+      "properties": {
+        "retentionDays": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 30
+        },
+        "autoRetryEnabled": {
+          "type": "boolean",
+          "default": true
+        },
+        "processingEnabled": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    }
+  },
+  "definitions": {
+    "fieldMapping": {
+      "type": "object",
+      "required": ["sourceField", "targetProperty", "required"],
+      "properties": {
+        "sourceField": {
+          "type": "string",
+          "description": "XPath of veldnaam in MTOM-bericht"
+        },
+        "targetProperty": {
+          "type": "string",
+          "description": "FileNet property naam"
+        },
+        "required": {
+          "type": "boolean",
+          "description": "Is dit veld verplicht?"
+        },
+        "format": {
+          "type": "string",
+          "description": "Formatstring voor datumconversies etc."
+        },
+        "defaultValue": {
+          "type": "string",
+          "description": "Standaardwaarde indien niet aanwezig"
+        },
+        "multiValue": {
+          "type": "boolean",
+          "default": false,
+          "description": "Kan dit veld meerdere waarden bevatten?"
+        }
+      }
+    }
+  }
+}

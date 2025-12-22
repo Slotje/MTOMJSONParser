@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<message xmlns="http://www.overheid.nl/ecm/mtom">
+    <header>
+        <ecmid>550e8400-e29b-41d4-a716-446655440001</ecmid>
+        <timestamp>2025-12-22T12:00:00Z</timestamp>
+    </header>
+    <metadata>
+        <value key="Eigenaar_L1">CA</value>
+        <value key="Eigenaar_L2">BTE</value>
+        <value key="Eigenaar_L3">Productie</value>
+        <value key="KenmerkInhoud">CDR-2025-001</value>
+        <value key="KenmerkType">Zaaknummer</value>
+        <value key="Documentsoort">Brief</value>
+        <value key="Kanaal">Email</value>
+        <value key="Middel">Email</value>
+        <value key="Middel">Post</value>
+        <value key="Richting">Inkomend</value>
+        <value key="StartArchiefwaardigheid">2025-12-22T12:00:00.000Z</value>
+        <value key="DekkingBeginDatum">2025-01-01</value>
+        <value key="DekkingEindDatum">2025-12-31</value>
+        <value key="Taal">NL</value>
+        <value key="Taal">EN</value>
+    </metadata>
+    <content mimeType="application/pdf" filename="example-document.pdf">
+        <data>JVBERi0xLjQKJeLjz9MKMyAwIG9iago8PC9UeXBlL1BhZ2UvUGFyZW50IDIgMCBSL1Jlc291cmNlczw8L0ZvbnQ8PC9GMSA1IDAgUj4+Pj4vTWVkaWFCb3hbMCAwIDYxMiA3OTJdL0NvbnRlbnRzIDQgMCBSPj4KZW5kb2JqCjQgMCBvYmoKPDwvTGVuZ3RoIDQ0Pj4Kc3RyZWFtCkJUCi9GMSA0OCBUZgoxMCA3MDAgVGQKKEhlbGxvIFdvcmxkKSBUagpFVAplbmRzdHJlYW0KZW5kb2JqCjUgMCBvYmoKPDwvVHlwZS9Gb250L1N1YnR5cGUvVHlwZTEvQmFzZUZvbnQvVGltZXMtUm9tYW4+PgplbmRvYmoKMiAwIG9iago8PC9UeXBlL1BhZ2VzL0NvdW50IDEvS2lkc1szIDAgUl0+PgplbmRvYmoKMSAwIG9iago8PC9UeXBlL0NhdGFsb2cvUGFnZXMgMiAwIFI+PgplbmRvYmoKNiAwIG9iago8PC9Qcm9kdWNlcihQREYuanMpL0NyZWF0aW9uRGF0ZShEOjIwMjUxMjIyMTIwMDAwWik+PgplbmRvYmoKeHJlZgowIDcKMDAwMDAwMDAwMCA2NTUzNSBmCjAwMDAwMDAzNDAgMDAwMDAgbgowMDAwMDAwMjk0IDAwMDAwIG4KMDAwMDAwMDAwOSAwMDAwMCBuCjAwMDAwMDAxNDggMDAwMDAgbgowMDAwMDAwMjQwIDAwMDAwIG4KMDAwMDAwMDM4OSAwMDAwMCBuCnRyYWlsZXIKPDwvU2l6ZSA3L1Jvb3QgMSAwIFIvSW5mbyA2IDAgUj4+CnN0YXJ0eHJlZgo0NjYKJSVFT0Y=</data>
+    </content>
+</message>
