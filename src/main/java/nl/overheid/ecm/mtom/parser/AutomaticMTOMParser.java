@@ -56,13 +56,9 @@ public class AutomaticMTOMParser {
             Element element = (Element) node;
             String tagName = element.getTagName();
 
-            // Get all attributes if present
-            if (element.hasAttributes()) {
-                for (int i = 0; i < element.getAttributes().getLength(); i++) {
-                    Node attr = element.getAttributes().item(i);
-                    String attrKey = tagName + "_" + attr.getNodeName();
-                    result.put(attrKey, attr.getNodeValue());
-                }
+            // Remove namespace prefix if present (e.g., "ecm:value" -> "value")
+            if (tagName.contains(":")) {
+                tagName = tagName.substring(tagName.indexOf(":") + 1);
             }
 
             // Check if element has text content (no child elements)
@@ -79,9 +75,16 @@ public class AutomaticMTOMParser {
                 // Leaf node - extract text content
                 String textContent = element.getTextContent().trim();
                 if (!textContent.isEmpty()) {
+                    String jsonKey = tagName;
+
+                    // Special handling for <value key="X">Y</value> pattern
+                    if ("value".equals(tagName) && element.hasAttribute("key")) {
+                        jsonKey = element.getAttribute("key");
+                    }
+
                     // Check if this key already exists (multi-value field)
-                    if (result.containsKey(tagName)) {
-                        Object existing = result.get(tagName);
+                    if (result.containsKey(jsonKey)) {
+                        Object existing = result.get(jsonKey);
                         List<String> values;
 
                         if (existing instanceof List) {
@@ -91,9 +94,9 @@ public class AutomaticMTOMParser {
                             values.add(existing.toString());
                         }
                         values.add(textContent);
-                        result.put(tagName, values);
+                        result.put(jsonKey, values);
                     } else {
-                        result.put(tagName, textContent);
+                        result.put(jsonKey, textContent);
                     }
                 }
             } else {

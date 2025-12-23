@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecm xmlns="http://www.belastingdienst.nl/ecm">
+  <header>
+    <class>ARC</class>
+    <sourceid>TEST-2024-001</sourceid>
+    <created>2024-03-15T14:30:00</created>
+    <createdby>PERRON</createdby>
+  </header>
+  <metadata>
+    <ecmid>550e8400-e29b-41d4-a716-446655440000</ecmid>
+    <value key="ARCBurgerServiceNummer">123456789</value>
+    <value key="KenmerkInhoud">Test document voor MTOM parsing</value>
+    <value key="Documentsoort">Brief</value>
+    <value key="Eigenaar_L1">Belastingdienst</value>
+    <value key="Eigenaar_L2">CFD</value>
+    <value key="Taal">Nederlands</value>
+    <value key="Taal">English</value>
+    <value key="Kanaal">Post</value>
+    <value key="Richting">Inkomend</value>
+    <value key="Status">Ontvangen</value>
+  </metadata>
+</ecm>
