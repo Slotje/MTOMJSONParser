@@ -4,14 +4,12 @@ import jakarta.enterprise.context.ApplicationScoped;
 import nl.overheid.ecm.mtom.exception.MTOMParsingException;
 import nl.overheid.ecm.mtom.exception.ErrorCode;
 import org.w3c.dom.Document;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Element;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathFactory;
 import java.io.ByteArrayInputStream;
 import java.util.HashMap;
 import java.util.Map;
@@ -19,86 +17,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Automatic MTOM parser that extracts all fields from MTOM XML
- * without requiring client configuration.
- * This is a proof of concept demonstrating MTOM to JSON conversion.
+ * Simple MTOM parser - extracts all data from XML and puts it in JSON with same names
  */
 @ApplicationScoped
 public class AutomaticMTOMParser {
 
     /**
-     * Parse MTOM XML and automatically extract all fields
-     *
-     * @param mtomXml The MTOM XML content
-     * @return Map containing all extracted fields
-     * @throws MTOMParsingException if parsing fails
+     * Parse MTOM XML - extract all elements and put in JSON
      */
     public Map<String, Object> parse(String mtomXml) throws MTOMParsingException {
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            factory.setNamespaceAware(true);
+            factory.setNamespaceAware(false);
             DocumentBuilder builder = factory.newDocumentBuilder();
-            Document document = builder.parse(new ByteArrayInputStream(mtomXml.getBytes()));
+            Document document = builder.parse(new ByteArrayInputStream(mtomXml.getBytes("UTF-8")));
 
-            XPath xpath = XPathFactory.newInstance().newXPath();
             Map<String, Object> result = new HashMap<>();
 
-            // Extract ecmid if present
-            String ecmid = (String) xpath.evaluate("//ecmid", document, XPathConstants.STRING);
-            if (ecmid != null && !ecmid.trim().isEmpty()) {
-                result.put("ecmid", ecmid.trim());
-            }
-
-            // Extract filename if present
-            String filename = (String) xpath.evaluate("//filename", document, XPathConstants.STRING);
-            if (filename != null && !filename.trim().isEmpty()) {
-                result.put("filename", filename.trim());
-            }
-
-            // Extract all value elements with key attributes
-            NodeList valueNodes = (NodeList) xpath.evaluate("//value[@key]", document, XPathConstants.NODESET);
-
-            for (int i = 0; i < valueNodes.getLength(); i++) {
-                Element element = (Element) valueNodes.item(i);
-                String key = element.getAttribute("key");
-                String value = element.getTextContent();
-
-                if (key != null && !key.trim().isEmpty()) {
-                    // Check if this key already exists (multi-value field)
-                    if (result.containsKey(key)) {
-                        Object existing = result.get(key);
-                        List<String> values;
-
-                        if (existing instanceof List) {
-                            values = (List<String>) existing;
-                        } else {
-                            values = new ArrayList<>();
-                            values.add(existing.toString());
-                        }
-
-                        if (value != null && !value.trim().isEmpty()) {
-                            values.add(value.trim());
-                        }
-                        result.put(key, values);
-                    } else {
-                        if (value != null && !value.trim().isEmpty()) {
-                            result.put(key, value.trim());
-                        }
-                    }
-                }
-            }
-
-            // Extract objectStore if present
-            String objectStore = (String) xpath.evaluate("//objectStore", document, XPathConstants.STRING);
-            if (objectStore != null && !objectStore.trim().isEmpty()) {
-                result.put("objectStore", objectStore.trim());
-            }
-
-            // Extract documentClass if present
-            String documentClass = (String) xpath.evaluate("//documentClass", document, XPathConstants.STRING);
-            if (documentClass != null && !documentClass.trim().isEmpty()) {
-                result.put("documentClass", documentClass.trim());
-            }
+            // Extract all elements from the XML
+            extractAllElements(document.getDocumentElement(), result);
 
             return result;
 
@@ -108,6 +45,63 @@ public class AutomaticMTOMParser {
                 "Failed to parse MTOM XML: " + e.getMessage(),
                 e
             );
+        }
+    }
+
+    /**
+     * Recursively extract all elements from XML node
+     */
+    private void extractAllElements(Node node, Map<String, Object> result) {
+        if (node.getNodeType() == Node.ELEMENT_NODE) {
+            Element element = (Element) node;
+            String tagName = element.getTagName();
+
+            // Get all attributes if present
+            if (element.hasAttributes()) {
+                for (int i = 0; i < element.getAttributes().getLength(); i++) {
+                    Node attr = element.getAttributes().item(i);
+                    String attrKey = tagName + "_" + attr.getNodeName();
+                    result.put(attrKey, attr.getNodeValue());
+                }
+            }
+
+            // Check if element has text content (no child elements)
+            NodeList children = element.getChildNodes();
+            boolean hasElementChildren = false;
+            for (int i = 0; i < children.getLength(); i++) {
+                if (children.item(i).getNodeType() == Node.ELEMENT_NODE) {
+                    hasElementChildren = true;
+                    break;
+                }
+            }
+
+            if (!hasElementChildren) {
+                // Leaf node - extract text content
+                String textContent = element.getTextContent().trim();
+                if (!textContent.isEmpty()) {
+                    // Check if this key already exists (multi-value field)
+                    if (result.containsKey(tagName)) {
+                        Object existing = result.get(tagName);
+                        List<String> values;
+
+                        if (existing instanceof List) {
+                            values = (List<String>) existing;
+                        } else {
+                            values = new ArrayList<>();
+                            values.add(existing.toString());
+                        }
+                        values.add(textContent);
+                        result.put(tagName, values);
+                    } else {
+                        result.put(tagName, textContent);
+                    }
+                }
+            } else {
+                // Has child elements - recurse
+                for (int i = 0; i < children.getLength(); i++) {
+                    extractAllElements(children.item(i), result);
+                }
+            }
         }
     }
 }
