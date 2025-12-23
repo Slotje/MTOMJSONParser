@@ -84,4 +84,28 @@ public class MTOMConversionResource {
             .entity("{\"status\": \"valid\", \"message\": \"MTOM message is valid\"}")
             .build();
     }
+
+    /**
+     * Automatically parse MTOM XML without client configuration.
+     * This is a proof of concept endpoint that extracts all fields from MTOM structure.
+     *
+     * POST /api/v1/mtom/parse
+     * Body: MTOM XML
+     */
+    @POST
+    @Path("/parse")
+    public Response parseMTOM(String mtomXml) {
+
+        LOG.info("Received automatic MTOM parsing request (configuration-free)");
+
+        if (mtomXml == null || mtomXml.isEmpty()) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                .entity("{\"error\": \"MTOM XML body is required\"}")
+                .build();
+        }
+
+        java.util.Map<String, Object> result = conversionService.parseAutomatically(mtomXml);
+
+        return Response.ok(result).build();
+    }
 }

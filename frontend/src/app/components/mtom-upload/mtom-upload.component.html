@@ -2,23 +2,10 @@
   <mat-card class="upload-card">
     <mat-card-header>
       <mat-card-title>MTOM to JSON Converter</mat-card-title>
-      <mat-card-subtitle>Upload MTOM XML file to convert to JSON</mat-card-subtitle>
+      <mat-card-subtitle>Automatic MTOM XML to JSON conversion - Proof of Concept</mat-card-subtitle>
     </mat-card-header>
 
     <mat-card-content>
-      <!-- Client Selection -->
-      <div class="form-section">
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Select Client</mat-label>
-          <mat-select [(ngModel)]="selectedClientId">
-            <mat-option *ngFor="let client of clients" [value]="client.clientId">
-              {{ client.clientName }} ({{ client.clientId }})
-            </mat-option>
-          </mat-select>
-          <mat-hint>Choose the client configuration for parsing</mat-hint>
-        </mat-form-field>
-      </div>
-
       <!-- File Upload -->
       <div class="form-section">
         <input
@@ -52,19 +39,10 @@
           mat-raised-button
           color="accent"
           (click)="convertMtom()"
-          [disabled]="!selectedFile || !selectedClientId || loading"
+          [disabled]="!selectedFile || loading"
         >
           <mat-icon>transform</mat-icon>
-          Convert to JSON
-        </button>
-
-        <button
-          mat-raised-button
-          (click)="validateMtom()"
-          [disabled]="!selectedFile || !selectedClientId || loading"
-        >
-          <mat-icon>check_circle</mat-icon>
-          Validate Only
+          Parse to JSON
         </button>
 
         <button

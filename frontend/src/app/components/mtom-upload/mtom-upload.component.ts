@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { MtomApiService } from '../../services/mtom-api.service';
-import { ParsedMessage } from '../../models/parsed-message.model';
-import { ClientConfiguration } from '../../models/client-configuration.model';
 import { ErrorResponse } from '../../models/error-response.model';
 
 @Component({
@@ -11,31 +9,15 @@ import { ErrorResponse } from '../../models/error-response.model';
 })
 export class MtomUploadComponent implements OnInit {
   selectedFile: File | null = null;
-  selectedClientId: string = '';
-  clients: ClientConfiguration[] = [];
   loading = false;
-  parsedJson: any | null = null;  // Simple JSON object with mapped fields
+  parsedJson: any | null = null;  // Simple JSON object with all extracted fields
   error: ErrorResponse | null = null;
   mtomContent: string = '';
 
   constructor(private mtomApiService: MtomApiService) {}
 
   ngOnInit(): void {
-    this.loadClients();
-  }
-
-  loadClients(): void {
-    this.mtomApiService.getAllConfigurations().subscribe({
-      next: (configs) => {
-        this.clients = Object.values(configs);
-        if (this.clients.length > 0) {
-          this.selectedClientId = this.clients[0].clientId;
-        }
-      },
-      error: (err) => {
-        console.error('Failed to load client configurations', err);
-      }
-    });
+    // No client configuration needed for automatic parsing
   }
 
   onFileSelected(event: Event): void {
@@ -57,8 +39,8 @@ export class MtomUploadComponent implements OnInit {
   }
 
   convertMtom(): void {
-    if (!this.mtomContent || !this.selectedClientId) {
-      alert('Please select a file and client');
+    if (!this.mtomContent) {
+      alert('Please select a file');
       return;
     }
 
@@ -66,30 +48,9 @@ export class MtomUploadComponent implements OnInit {
     this.parsedJson = null;
     this.error = null;
 
-    this.mtomApiService.convertMtom(this.mtomContent, this.selectedClientId).subscribe({
+    this.mtomApiService.parseMtom(this.mtomContent).subscribe({
       next: (result) => {
         this.parsedJson = result;
-        this.loading = false;
-      },
-      error: (err) => {
-        this.error = err.error as ErrorResponse;
-        this.loading = false;
-      }
-    });
-  }
-
-  validateMtom(): void {
-    if (!this.mtomContent || !this.selectedClientId) {
-      alert('Please select a file and client');
-      return;
-    }
-
-    this.loading = true;
-    this.error = null;
-
-    this.mtomApiService.validateMtom(this.mtomContent, this.selectedClientId).subscribe({
-      next: (result) => {
-        alert('MTOM message is valid!');
         this.loading = false;
       },
       error: (err) => {

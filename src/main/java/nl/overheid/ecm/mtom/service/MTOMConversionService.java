@@ -5,6 +5,7 @@ import jakarta.inject.Inject;
 import nl.overheid.ecm.mtom.model.ClientConfiguration;
 import nl.overheid.ecm.mtom.model.ParsedMessage;
 import nl.overheid.ecm.mtom.parser.MTOMParser;
+import nl.overheid.ecm.mtom.parser.AutomaticMTOMParser;
 import nl.overheid.ecm.mtom.validator.JsonSchemaValidator;
 import nl.overheid.ecm.mtom.validator.MessageValidator;
 import org.jboss.logging.Logger;
@@ -18,6 +19,9 @@ public class MTOMConversionService {
 
     @Inject
     MTOMParser mtomParser;
+
+    @Inject
+    AutomaticMTOMParser automaticMTOMParser;
 
     @Inject
     ConfigurationService configurationService;
@@ -91,5 +95,21 @@ public class MTOMConversionService {
         messageValidator.validate(parsedMessage, config);
 
         LOG.infof("MTOM message validation successful for client: %s", clientId);
+    }
+
+    /**
+     * Automatically parse MTOM XML without client configuration.
+     * This is a proof of concept that extracts all fields from the MTOM structure.
+     *
+     * @param mtomXml MTOM message as XML string
+     * @return Map with all automatically extracted fields
+     */
+    public java.util.Map<String, Object> parseAutomatically(String mtomXml) {
+        LOG.info("Starting automatic MTOM parsing (configuration-free)");
+
+        java.util.Map<String, Object> result = automaticMTOMParser.parse(mtomXml);
+
+        LOG.infof("Successfully parsed MTOM message, extracted %d fields", result.size());
+        return result;
     }
 }

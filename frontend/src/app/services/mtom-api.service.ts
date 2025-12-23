@@ -14,6 +14,22 @@ export class MtomApiService {
   constructor(private http: HttpClient) {}
 
   /**
+   * Automatically parse MTOM XML without client configuration.
+   * This is a proof of concept that extracts all fields from MTOM structure.
+   */
+  parseMtom(mtomXml: string): Observable<any> {
+    return this.http.post<any>(
+      `${this.apiUrl}/api/v1/mtom/parse`,
+      mtomXml,
+      {
+        headers: {
+          'Content-Type': 'application/xml'
+        }
+      }
+    );
+  }
+
+  /**
    * Convert MTOM XML to JSON (simple mapping)
    */
   convertMtom(mtomXml: string, clientId: string): Observable<any> {
