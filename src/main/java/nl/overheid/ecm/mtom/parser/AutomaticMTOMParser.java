@@ -1,5 +1,6 @@
 package nl.overheid.ecm.mtom.parser;
 
+import jakarta.enterprise.context.ApplicationScoped;
 import nl.overheid.ecm.mtom.exception.MTOMParsingException;
 import nl.overheid.ecm.mtom.exception.ErrorCode;
 import org.w3c.dom.Document;
@@ -22,6 +23,7 @@ import java.util.List;
  * without requiring client configuration.
  * This is a proof of concept demonstrating MTOM to JSON conversion.
  */
+@ApplicationScoped
 public class AutomaticMTOMParser {
 
     /**
